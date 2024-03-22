@@ -103,6 +103,7 @@ const censorSwearWords = (message) => {
   for (const word of swearWords) {
     const regex = new RegExp(`\\b${word}\\b`, "gi"); // Case insensitive whole word match
     message = message.replace(regex, "*".repeat(word.length));
+    console.log("censoring swear word");
   }
   return message;
 };
