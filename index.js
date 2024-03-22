@@ -92,7 +92,7 @@ const swearWords = [
 // Function to censor swear words
 const censorSwearWords = (text) => {
   for (const word of swearWords) {
-    const regex = new RegExp(`\\b${word}\\b`, "gi"); // Case insensitive whole word match
+    const regex = new RegExp(`\\b${word}\\b|${word}`, "gi"); // Match whole word or part of larger string
     text = text.replace(regex, (match) => "*".repeat(match.length));
   }
   return text;
