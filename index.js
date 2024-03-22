@@ -22,90 +22,29 @@ const swearWords = [
   "twat",
   "piss",
   "bullshit",
-  "damn",
-  "arsehole",
-  "wanker",
-  "bollocks",
-  "pussy",
-  "prick",
-  "douchebag",
-  "fucking",
-  "shitty",
-  "dickhead",
-  "fuckhead",
-  "shithead",
-  "asshat",
-  "dickweed",
-  "pisshead",
-  "douche",
-  "motherfucking",
-  "cockhead",
-  "cuntface",
-  "nigger",
-  "nigga",
-  "kike",
-  "spic",
-  "chink",
-  "wetback",
-  "gook",
-  "raghead",
-  "sandnigger",
-  "towelhead",
-  "camel jockey",
-  "coon",
-  "jungle bunny",
-  "porch monkey",
-  "beaner",
-  "white trash",
-  "trailer trash",
-  "cracker",
-  "redneck",
-  "hillbilly",
-  "honky",
-  "wop",
-  "guido",
-  "faggot",
-  "dyke",
-  "homo",
-  "queer",
-  "dyke",
-  "tranny",
-  "shemale",
-  "fag",
-  "faggit",
-  "faggoty",
-  "faggotry",
-  "fagging",
-  "fagged",
-  "faggotish",
-  "faggotness",
-  "faggotism",
-  "faggoted",
-  "faggy",
-  "faggoties",
-  "faggotdom",
-  "faggotishness",
-  "faggotage",
-  "faggotlike",
-  "faggoteer",
-  "faggoter",
-  "faggotry",
-  "faggotries",
-  "faggotish",
-  "faggotized",
-  "faggotry's",
+  // Add more words as needed
 ];
+
+// Function to censor swear words
+const censorSwearWords = (text) => {
+  for (const word of swearWords) {
+    const regex = new RegExp(`\\b${word}\\b`, "gi"); // Case insensitive whole word match
+    text = text.replace(regex, "*".repeat(word.length));
+  }
+  return text;
+};
 
 let messages = [];
 
-// Function to censor swear words
-const censorSwearWords = (message) => {
+// Function to check if username contains swear words
+const isUsernameValid = (username) => {
   for (const word of swearWords) {
-    const regex = new RegExp(`\\b${word}\\b`, "gi"); // Case insensitive whole word match
-    message = message.replace(regex, "*".repeat(word.length));
-    console.log("censoring swear word");
+    const regex = new RegExp(`\\b${word}\\b`, "i"); // Case insensitive whole word match
+    if (regex.test(username)) {
+      return false;
+    }
   }
-  return message;
+  return true;
 };
 
 app.get("/messages", (req, res) => {
@@ -122,6 +61,9 @@ app.post("/messages", (req, res) => {
     return res
       .status(400)
       .json({ error: "Message must be at most 200 characters" });
+  }
+  if (!isUsernameValid(username)) {
+    return res.status(400).json({ error: "Invalid username" });
   }
   const censoredMessage = censorSwearWords(message); // Censor swear words
   const newMessage = { username, message: censoredMessage };
