@@ -57,13 +57,18 @@ app.post("/messages", (req, res) => {
   if (!username || !message) {
     return res.status(400).json({ error: "Username and message are required" });
   }
+  if (username.length > 20) {
+    return res
+      .status(400)
+      .json({ error: "Username must be at most 20 characters" });
+  }
+  if (!isUsernameValid(username)) {
+    return res.status(400).json({ error: "Invalid username" });
+  }
   if (message.length > 200) {
     return res
       .status(400)
       .json({ error: "Message must be at most 200 characters" });
-  }
-  if (!isUsernameValid(username)) {
-    return res.status(400).json({ error: "Invalid username" });
   }
   const censoredMessage = censorSwearWords(message); // Censor swear words
   const newMessage = { username, message: censoredMessage };
