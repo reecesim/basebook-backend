@@ -12,6 +12,9 @@ app.use(cors());
 const swearWords = [
   "fuck",
   "shit",
+  "jew",
+  "kike",
+  "fags",
   "asshole",
   "bitch",
   "bastard",
